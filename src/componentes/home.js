@@ -127,11 +127,6 @@ const Home = () => {
         alldata.push(dataVillain)
         graficPie("alldataPie", alldata)
     }
-    console.log(maxStatHero)
-    console.log(maxStatVillain)
-    console.log(maxStatAll)
-    console.log(weightHero)
-    console.log(weightHero.map(dato => console.log(dato)))
     return (
         <main className="main">
             {localStorage.getItem("heroesId") !== null && localStorage.getItem("heroesId").length !== 2 ?

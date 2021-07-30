@@ -27,9 +27,7 @@ const Heroes = (props) => {
             if (localStorage.getItem(`${alignment}`) !== null) {
                 const getCharacters = localStorage.getItem(`${alignment}`)
                 const parseCharacters = JSON.parse(getCharacters);
-
                 const arrayAllHeroes = parseCharacters.map(dato => JSON.parse(dato))
-
                 for (let data of arrayAllHeroes) {
                     const id = data.map(dato => dato.id.includes(contentDataId))
                     if (id[0] === true) {
@@ -38,22 +36,17 @@ const Heroes = (props) => {
                     }
                 }
                 parseCharacters.map(dato => arrayCharacters.push(dato))
-                console.log(parseCharacters)
                 if (repeatId === false && arrayCharacters.length < 3) {
                     const datosHeroe = datosJson.results.filter(dato => dato.id === contentDataId).map(dato => dato);
-
                     const stringHero = JSON.stringify(datosHeroe);
-
                     arrayCharacters.push(stringHero)
-
                     const sendHero = JSON.stringify(arrayCharacters);
-
                     localStorage.setItem(`${alignment}`, sendHero);
-                    setTimeout(() => { 
-                        setShowMsjAddCharacter(false) 
-                    }, 1500); 
-                    setShowMsjAddCharacter(true) 
-                    setMsjAddCharacter(true) 
+                    setTimeout(() => {
+                        setShowMsjAddCharacter(false)
+                    }, 1500);
+                    setShowMsjAddCharacter(true)
+                    setMsjAddCharacter(true)
                 } else {
                     setTimeout(() => {
                         setShowMsjAddCharacter(false)
@@ -69,7 +62,6 @@ const Heroes = (props) => {
                 localStorage.setItem(`${alignment}`, mandarLocal)
             }
         }
-       
         if (contentAlignment === "good") {
             addCharacter("heroesId")
         } else {
@@ -90,7 +82,7 @@ const Heroes = (props) => {
                         <button className="character--button" onClick={setData} dataid={dato.id} dataalignment={dato.biography.alignment}>Add to team</button>
                     </div>
                 </div>
-            ) : console.log("no exito")}
+            ) : <h1 className="main--title">No hero or villain found</h1>}
         </div>
     )
 }

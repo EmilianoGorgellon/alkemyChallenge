@@ -50,9 +50,6 @@ const CharacterInfo = (props) => {
                 </div>
             </section>
         </div>
-
-
-
     )
 }
 export default CharacterInfo;
