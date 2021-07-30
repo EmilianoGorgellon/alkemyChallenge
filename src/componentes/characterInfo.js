@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios"
-const HeroInfo = (props) => {
+const CharacterInfo = (props) => {
     const parametros = useParams();
     const [datosJson, setDatosJson] = useState([]);
     const [image, setImage] = useState([]);
@@ -28,7 +28,6 @@ const HeroInfo = (props) => {
         obtenerDatos()
     }, [])
 
-    // Alias: {alias.map((dato, i) => <span key={i}>{dato} <br /></span>)}
     return (
         <div className="container--info">
             <section className="container--card-info">
@@ -56,4 +55,4 @@ const HeroInfo = (props) => {
 
     )
 }
-export default HeroInfo;
+export default CharacterInfo;

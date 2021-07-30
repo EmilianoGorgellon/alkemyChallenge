@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSignOutAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { React, useState } from "react";
 import Heroes from "./heroes.js";
-import HeroInfo from "./heroinfo.js";
+import CharacterInfo from "./characterInfo.js";
 
 import logo from "./../assets/image/logo.png"
 import Home from "./home.js"
@@ -31,7 +31,7 @@ const App = () => {
 
                     <Switch>
                         <Route exact path="/:id">
-                            <HeroInfo />
+                            <CharacterInfo />
                         </Route>
                         <Route exact path="/search/:name">
                             <Heroes name={buscador} />

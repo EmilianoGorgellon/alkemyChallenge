@@ -5,19 +5,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 const Login = () => {
-    const validacion = {
+    const validation = {
         email: /^[a-zA-Z0-9\.-_]{3,30}@+[a-zA-Z0-9\.-_]{3,15}\.+[a-zA-Z]+$/,
         password: /^[a-zA-Z0-9\.-_]{4,12}$/
     }
     const [login, setLogin] = useState(localStorage.getItem("login"))
-    const [mensajeError, setMensajeError] = useState(false);
+    const [msjError, setMsjError] = useState(false);
     return (
         <div>
             {login ? (localStorage.setItem("login", login), <Redirect to="/" />)
                 :
                 <Formik initialValues={{ email: "", password: "" }}
                     onSubmit={values => {
-                        { (validacion.email.test(values.email) && values.email === "challenge@alkemy.org") && (validacion.password.test(values.password) && values.password === "react") ? setLogin(4178223422261863) : setMensajeError(true) }
+                        { (validation.email.test(values.email) && values.email === "challenge@alkemy.org") && (validation.password.test(values.password) && values.password === "react") ? setLogin(4178223422261863) : setMsjError(true) }
                     }}
                 >
                     <Form className="container--form">
@@ -30,7 +30,7 @@ const Login = () => {
                             <label id="password-label">Password: </label>
                             <Field name="password" id="password-label" className="form-control" type="password" placeholder="Password"></Field>
                         </div>
-                        <p className={mensajeError ? "show--msj-error" : "no--show"}><FontAwesomeIcon icon={faExclamationTriangle} />Error, email and/or password incorrect</p>
+                        <p className={msjError ? "show--msj-error" : "no--show"}><FontAwesomeIcon icon={faExclamationTriangle} />Error, email and/or password incorrect</p>
                         <button className="btn btn-primary container-fluid" type="submit">Login</button>
                     </Form>
                 </Formik>

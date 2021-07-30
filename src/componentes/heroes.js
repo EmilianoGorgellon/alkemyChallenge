@@ -1,25 +1,34 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faExclamationCircle, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 const Heroes = (props) => {
-    const parametros = useParams();
+    const params = useParams();
     const [datosJson, setDatosJson] = useState([]);
+    const [showMsjAddCharacter, setShowMsjAddCharacter] = useState(false)
+    const [msjAddCharacter, setMsjAddCharacter] = useState(false)
     const token = localStorage.getItem("login");
     useEffect(() => {
-        const obtenerDatos = async () => {
-            const response = await fetch(`https://www.superheroapi.com/api.php/${token}/search/${parametros.name}`)
+        const getData = async () => {
+            const response = await fetch(`https://www.superheroapi.com/api.php/${token}/search/${params.name}`)
             let datos = await response.json()
             return setDatosJson(datos)
         }
-        obtenerDatos()
-    }, [parametros.name])
+        getData()
+    }, [params.name])
 
     const setData = (e) => {
-        const Agregarheroe = (alignment) => {
+        const dataId = e.target.attributes.dataid;
+        const contentDataId = dataId.textContent;
+        const contentAlignment = e.target.attributes.dataalignment.textContent;
+        const arrayCharacters = [];
+        let repeatId = false;
+        const addCharacter = (alignment) => {
             if (localStorage.getItem(`${alignment}`) !== null) {
-                const obtengoHeroes = localStorage.getItem(`${alignment}`)
-                const parseoHeroes = JSON.parse(obtengoHeroes);
+                const getCharacters = localStorage.getItem(`${alignment}`)
+                const parseCharacters = JSON.parse(getCharacters);
 
-                const arrayAllHeroes = parseoHeroes.map(dato => JSON.parse(dato))
+                const arrayAllHeroes = parseCharacters.map(dato => JSON.parse(dato))
 
                 for (let data of arrayAllHeroes) {
                     const id = data.map(dato => dato.id.includes(contentDataId))
@@ -28,39 +37,50 @@ const Heroes = (props) => {
                         break
                     }
                 }
-                parseoHeroes.map(dato => arrayHeroes.push(dato))
-                if (repeatId === false && arrayHeroes.length < 3) {
+                parseCharacters.map(dato => arrayCharacters.push(dato))
+                console.log(parseCharacters)
+                if (repeatId === false && arrayCharacters.length < 3) {
                     const datosHeroe = datosJson.results.filter(dato => dato.id === contentDataId).map(dato => dato);
 
                     const stringHero = JSON.stringify(datosHeroe);
 
-                    arrayHeroes.push(stringHero)
+                    arrayCharacters.push(stringHero)
 
-                    const sendHero = JSON.stringify(arrayHeroes);
+                    const sendHero = JSON.stringify(arrayCharacters);
 
-                    localStorage.setItem(`${alignment}`, sendHero)
+                    localStorage.setItem(`${alignment}`, sendHero);
+                    setTimeout(() => { 
+                        setShowMsjAddCharacter(false) 
+                    }, 1500); 
+                    setShowMsjAddCharacter(true) 
+                    setMsjAddCharacter(true) 
+                } else {
+                    setTimeout(() => {
+                        setShowMsjAddCharacter(false)
+                    }, 1500)
+                    setShowMsjAddCharacter(true)
+                    setMsjAddCharacter(false)
                 }
             } else {
                 const datosHeroe = datosJson.results.filter(dato => dato.id === contentDataId).map(dato => dato)
                 let stringHero = JSON.stringify(datosHeroe)
-                arrayHeroes.push(stringHero)
-                const mandarLocal = JSON.stringify(arrayHeroes)
+                arrayCharacters.push(stringHero)
+                const mandarLocal = JSON.stringify(arrayCharacters)
                 localStorage.setItem(`${alignment}`, mandarLocal)
             }
         }
-        const dataId = e.target.attributes.dataid;
-        const contentDataId = dataId.textContent;
-        const contentAlignment = e.target.attributes.dataalignment.textContent;
-        const arrayHeroes = [];
-        let repeatId = false;
+       
         if (contentAlignment === "good") {
-            Agregarheroe("heroesId")
+            addCharacter("heroesId")
         } else {
-            Agregarheroe("villainId")
+            addCharacter("villainId")
         }
     }
     return (
         <div className="container--search">
+            <div className={showMsjAddCharacter ? "show--msj" : "not--show-msj"}>
+                <p className={msjAddCharacter ? "add-character" : "not--add-character"}><FontAwesomeIcon icon={msjAddCharacter ? faCheckCircle : faExclamationCircle} /> {msjAddCharacter ? "Add new Character" : "Error: Max limit same alingment character of 3"} </p>
+            </div>
             {datosJson.response === "success" ? datosJson.results.map((dato, i) =>
                 <div key={i} className={`container--character-heroesId`}>
                     <h2 className="character--title">{dato.name}</h2>
