@@ -54,7 +54,7 @@
     margin-top: 20px;
 }
 
-/* styles Home */
+/* styles Header */
 .container--nav {
     display: flex;
     height: 70px;
@@ -122,7 +122,7 @@
     color: var(--white);
     cursor: pointer;
 }
-
+/* Styles Home */
 .main {
     width: 100%;
     min-height: 100vh;
@@ -159,7 +159,20 @@
     width: 100%;
     color: var(--white);
 }
-
+.container--cards {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+}
+@media screen and (min-width: 590px) and (max-width: 768px) {
+    .container--cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media screen and (min-width: 768px) {
+    .container--cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
 .container--character-heroesId, .container--character-villainId {
     position: relative;
     display: flex;
@@ -167,13 +180,7 @@
     margin: 5% 10%;
     justify-items: center;
 }
-@media screen and (min-width: 768px) {
-    .container--cards {
-        display: flex;
-        width: 100%;
-        flex-wrap: nowrap;
-    }
-}
+
 
 .character--title {
     position: absolute;
@@ -230,8 +237,8 @@
     flex-direction: column;
     width: 100%;
 }
-.title-pie {
-    margin-top: 50px;
+.title-stats {
+    margin-top: 30px;
     margin-bottom: 50px;
     color: var(--white);
 }

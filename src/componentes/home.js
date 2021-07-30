@@ -154,7 +154,7 @@ const Home = () => {
                             )}
                         </div>
                         <div className="container--grafic-pie">
-                            <h2 className="title-pie">Stats heroes</h2>
+                            <h2 className="title-stats">Stats heroes</h2>
                             <div className="container--team-stats">
                                 <p className="team--stats-text">
                                     Strongest stat of the team:<span> {maxStatHero} </span> <br/>
@@ -203,7 +203,7 @@ const Home = () => {
                             )}
                         </div>
                         <div className="container--grafic-pie">
-                            <h2 className="title-pie">Stats Villains</h2>
+                            <h2 className="title-stats">Stats Villains</h2>
                             <div className="container--team-stats">
                                 <p className="team--stats-text">
                                     Strongest stat of the team:<span> {maxStatVillain} </span> <br/>
@@ -232,7 +232,7 @@ const Home = () => {
             {localStorage.getItem("heroesId") !== null && localStorage.getItem("villainId") !== null ?
                 <>
                     <section className="container--total">
-                        <h2 className="title-pie">Team All Stats</h2>
+                        <h2 className="title-stats">Team All Stats</h2>
                         <div className="container--team-stats">
                             <p className="team--stats-text">
                                 Strongest stat of the team:<span> {maxStatAll} </span> <br/>
