@@ -2,9 +2,9 @@ import { Switch, Route, Link, Redirect } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSignOutAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { React, useState } from "react";
+import Slide from 'react-reveal/Slide'
 import Heroes from "./heroes.js";
 import CharacterInfo from "./characterInfo.js";
-
 import logo from "./../assets/image/logo.png"
 import Home from "./home.js"
 const App = () => {
@@ -18,7 +18,8 @@ const App = () => {
     return (
         <>
             {Inicio ?
-                <>
+                <>  
+                    <Slide top>
                     <header>
                         <nav className="container--nav">
                             <ul className="nav--ul">
@@ -28,7 +29,7 @@ const App = () => {
                             </ul>
                         </nav>
                     </header>
-
+                    </Slide>
                     <Switch>
                         <Route exact path="/:id">
                             <CharacterInfo />
@@ -40,6 +41,7 @@ const App = () => {
                             <Home />
                         </Route>
                     </Switch>
+                    
                 </> : <Redirect to="/login" />}
         </>
     )

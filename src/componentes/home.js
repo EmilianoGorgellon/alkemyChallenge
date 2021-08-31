@@ -1,258 +1,439 @@
 import { React, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PieChart, Pie, Tooltip } from 'recharts';
+import Fade from 'react-reveal/Fade'
 const Home = () => {
-    let dataHero;
-    let reparseHeroId;
-    let dataVillain;
-    let reparseVillainId;
-    let alldata = [];
-    let alldataPie;
-    const heigthAll = [];
-    const weightAll = [];
-    const heightHero = [];
-    const weightHero = [];
-    const heightVillain = [];
-    const weightVillain = [];
-    const maxStatHero = [];
-    const maxStatVillain = [];
-    const maxStatAll = [];
-    const getCharacter = (character) => {
-        if (character === "heroesId") {
-            const getHeroId = localStorage.getItem(character);
-            const parseHeroId = JSON.parse(getHeroId);
-            reparseHeroId = parseHeroId.map(dato => JSON.parse(dato))
-            graficPie("dataHero", reparseHeroId)
-        } else {
-            const getVillainId = localStorage.getItem(character);
-            const parseVillainId = JSON.parse(getVillainId);
-            reparseVillainId = parseVillainId.map(dato => JSON.parse(dato))
-            graficPie("dataVillain", reparseVillainId)
-        }
-    }
-    const graficPie = (nameData, reparseCharacters) => {
+    const [getHero, setGetHero] = useState();
+    const [statsHeroes, setStatsHeroes] = useState(0);
+    const [maxStatNameHeroes, setMaxStatNameHero] = useState("");
+    const [maxStatHeroes, setMaxStatHero] = useState();
+    const [averageWeigthHero, setAverageWeigthHero] = useState();
+    const [averageHeigthHero, setAverageHeigthHero] = useState();
+
+    const [getVillain, setGetVillain] = useState();
+    const [statsVillains, setStatsVillains] = useState(0);
+    const [maxStatNameVillain, setMaxStatNameVillain] = useState();
+    const [maxStatVillain, setMaxStatVillain] = useState();
+    const [averageWeigthVillain, setAverageWeigthVillain] = useState();
+    const [averageHeigthVillain, setAverageHeigthVillain] = useState();
+
+    const [stats, setStats] = useState()
+    const [render, setRender] = useState(false)
+
+    const [weightAll, setWeigthAll] = useState();
+    const [heightAll, setHeightAll] = useState();
+    const [pieAll, setPieAll] = useState();
+
+    const [maxStatAll, setMaxStatAll] = useState()
+    const [maxStatNameAll, setMaxStatNameAll] = useState()
+    const pieTeam = [];
+    const weigthTeam = [];
+    const heightTeam = [];
+    const getPie = (pieCharacter, typeCharacter) => {
         let intelligence = 0;
         let strength = 0;
         let speed = 0;
         let durability = 0;
         let power = 0;
         let combat = 0;
-        if (nameData === "dataHero" || nameData === "dataVillain") {
-            for (let i of reparseCharacters) {
-                intelligence = (intelligence + parseInt(i.map(dato => dato.powerstats.intelligence)));
-                strength = (strength + parseInt(i.map(dato => dato.powerstats.strength)));
-                speed = (speed + parseInt(i.map(dato => dato.powerstats.speed)));
-                durability = (durability + parseInt(i.map(dato => dato.powerstats.durability)));
-                power = (power + parseInt(i.map(dato => dato.powerstats.power)));
-                combat = (combat + parseInt(i.map(dato => dato.powerstats.combat)));
-                heigthAll.push(i.map(dato => parseInt(dato.appearance.height[1])))
-                weightAll.push(i.map(dato => parseInt(dato.appearance.weight[1])))
-                if (nameData === "dataHero") {
-                    heightHero.push(i.map(dato => parseInt(dato.appearance.height[1])))
-                    weightHero.push(i.map(dato => parseInt(dato.appearance.weight[1])))
-                } else {
-                    heightVillain.push(i.map(dato => parseInt(dato.appearance.height[1])))
-                    weightVillain.push(i.map(dato => parseInt(dato.appearance.weight[1])))
+        let height = 0;
+        let weight = 0;
+        for (let i of pieCharacter) {
+            i.map(dato => {
+                intelligence = intelligence + parseInt(dato.powerstats.intelligence)
+                strength = strength + parseInt(dato.powerstats.strength)
+                speed = speed + parseInt(dato.powerstats.speed)
+                durability = durability + parseInt(dato.powerstats.durability)
+                power = power + parseInt(dato.powerstats.power)
+                combat = combat + parseInt(dato.powerstats.combat)
+            })
+            height = height + parseInt(i.map(dato => dato.appearance.height[1]))
+            weight = weight + parseInt(i.map(dato => dato.appearance.weight[1]))
+        }
+        const statsCharacter = [
+            { name: "intelligence", value: intelligence },
+            { name: "strength", value: strength },
+            { name: "speed", value: speed },
+            { name: "durability", value: durability },
+            { name: "power", value: power },
+            { name: "combat", value: combat }
+        ]
+        const maxStat = Math.max(...statsCharacter.map(dato => dato.value))
+        const maxStatName = statsCharacter.filter(dato => dato.value === maxStat).map(dato => dato.name);
+        if (typeCharacter === "heroesId") {
+            setStatsHeroes(statsCharacter);
+            setMaxStatNameHero(maxStatName);
+            setMaxStatHero(maxStat);
+            setAverageHeigthHero(height);
+            setAverageWeigthHero(weight);
+
+        } else if (typeCharacter === "villainId") {
+            setStatsVillains(statsCharacter);
+            setMaxStatNameVillain(maxStatName);
+            setMaxStatVillain(maxStat);
+            setAverageHeigthVillain(height);
+            setAverageWeigthVillain(weight);
+
+        }
+
+        weigthTeam.push(weight);
+        heightTeam.push(height);
+        pieTeam.push(statsCharacter);
+        setHeightAll(heightTeam);
+        setWeigthAll(weigthTeam);
+
+        if (pieTeam.length === 2) {
+            let intelligenceTeam = 0;
+            let strengthTeam = 0;
+            let speedTeam = 0;
+            let durabilityTeam = 0;
+            let powerTeam = 0;
+            let combatTeam = 0;
+            for (let i of pieTeam) {
+                intelligenceTeam = intelligenceTeam + parseInt(i.filter(dato => dato.name === "intelligence").map(dato => dato.value))
+                strengthTeam = strengthTeam + parseInt(i.filter(dato => dato.name === "strength").map(dato => dato.value))
+                speedTeam = speedTeam + parseInt(i.filter(dato => dato.name === "speed").map(dato => dato.value))
+                durabilityTeam = durabilityTeam + parseInt(i.filter(dato => dato.name === "durability").map(dato => dato.value))
+                powerTeam = powerTeam + parseInt(i.filter(dato => dato.name === "power").map(dato => dato.value))
+                combatTeam = combatTeam + parseInt(i.filter(dato => dato.name === "combat").map(dato => dato.value))
+            }
+            const statsPie = [
+                { name: "intelligence", value: intelligenceTeam },
+                { name: "strength", value: strengthTeam },
+                { name: "speed", value: speedTeam },
+                { name: "durability", value: durabilityTeam },
+                { name: "power", value: powerTeam },
+                { name: "combat", value: combatTeam }
+            ]
+            const $maxStatAll = Math.max(...statsPie.map(dato => dato.value))
+            const $maxStatNameAll = statsPie.filter(dato => dato.value === $maxStatAll).map(dato => dato.name)
+            setMaxStatAll($maxStatAll);
+            setMaxStatNameAll($maxStatNameAll);
+            setPieAll(statsPie);
+        }
+    }
+    useEffect(() => {
+        const $getHero = localStorage.getItem("heroesId");
+        const $getVillain = localStorage.getItem("villainId")
+        const parseHero = JSON.parse($getHero)
+        const parseVillain = JSON.parse($getVillain)
+        if ($getHero !== null) {
+            const reparseHero = parseHero.map(dato => JSON.parse(dato))
+            setGetHero(reparseHero)
+            getPie(reparseHero, "heroesId")
+        } else {
+            setGetHero(undefined)
+        }
+        if ($getVillain !== null) {
+            const reparseVillain = parseVillain.map(dato => JSON.parse(dato))
+            setGetVillain(reparseVillain)
+            getPie(reparseVillain, "villainId")
+        } else {
+            setGetVillain(undefined)
+        }
+    }, [render])
+
+    const mouseEnter = (e) => {
+        const showPieOnMouse = (getTypeCharacter, dataId) => {
+            for (let parseHero of getTypeCharacter) {
+                for (let dato of parseHero) {
+                    if (Number(dato.id) === dataId) {
+                        const dataStats = [
+                            { name: "intelligence", value: parseInt(dato.powerstats.intelligence) },
+                            { name: "strength", value: parseInt(dato.powerstats.strength) },
+                            { name: "speed", value: parseInt(dato.powerstats.speed) },
+                            { name: "durability", value: parseInt(dato.powerstats.durability) },
+                            { name: "power", value: parseInt(dato.powerstats.power) },
+                            { name: "combat", value: parseInt(dato.powerstats.combat) }
+                        ];
+                        setStats(dataStats)
+                        break;
+                    }
                 }
             }
-        } else {
-            for (let i of alldata) {
-                intelligence = intelligence + parseInt(i.filter(dato => dato.name === "intelligence").map(dato => dato.value))
-                strength = strength + parseInt(i.filter(dato => dato.name === "strength").map(dato => dato.value))
-                speed = speed + parseInt(i.filter(dato => dato.name === "speed").map(dato => dato.value))
-                durability = durability + parseInt(i.filter(dato => dato.name === "durability").map(dato => dato.value))
-                power = power + parseInt(i.filter(dato => dato.name === "power").map(dato => dato.value))
-                combat = combat + parseInt(i.filter(dato => dato.name === "combat").map(dato => dato.value))
-            }
         }
-
-        if (nameData === "dataHero") {
-            dataHero = [
-                { name: "intelligence", value: intelligence },
-                { name: "strength", value: strength },
-                { name: "speed", value: speed },
-                { name: "durability", value: durability },
-                { name: "power", value: power },
-                { name: "combat", value: combat }
-            ]
-            const maxStat = Math.max(...dataHero.map(dato => dato.value))
-            maxStatHero.push(dataHero.filter(dato => dato.value === maxStat).map(dato => dato.name))
-        } else if (nameData === "dataVillain") {
-            dataVillain = [
-                { name: "intelligence", value: intelligence },
-                { name: "strength", value: strength },
-                { name: "speed", value: speed },
-                { name: "durability", value: durability },
-                { name: "power", value: power },
-                { name: "combat", value: combat }
-            ]
-            const maxStat = Math.max(...dataVillain.map(dato => dato.value))
-            maxStatVillain.push(dataVillain.filter(dato => dato.value === maxStat).map(dato => dato.name))
-        } else {
-            alldataPie = [
-                { name: "intelligence", value: intelligence },
-                { name: "strength", value: strength },
-                { name: "speed", value: speed },
-                { name: "durability", value: durability },
-                { name: "power", value: power },
-                { name: "combat", value: combat }
-            ]
-            const maxStat = Math.max(...alldataPie.map(dato => dato.value))
-            maxStatAll.push(alldataPie.filter(dato => dato.value === maxStat).map(dato => dato.name))
-        }
+        const card = e.target.closest(".container--characters");
+        const typeCharacter = card.querySelector(".card--home").attributes.typecharacter.textContent;
+        const dataId = Number(card.querySelector(".card--home").attributes.dataid.textContent);
+        typeCharacter === "hero" ? showPieOnMouse(getHero, dataId) : showPieOnMouse(getVillain, dataId)
+        card.querySelector(".character--img").classList.add('no-show');
+        card.querySelector(".container--only-pie").classList.add('show');
+        card.querySelector(".container--only-pie").classList.remove('no-show');
     }
+
+    const mouseLeave = (e) => {
+        const card = e.target.closest(".container--characters");
+        card.querySelector(".character--img").classList.remove('no-show');
+        card.querySelector(".container--only-pie").classList.replace('show', 'no-show');
+    }
+
     const removeCharacter = (e) => {
-        const getStorageKey = e.target.attributes.datastorage.textContent;
-        e.target.closest(`.container--character-${getStorageKey}`).remove();
-        let getId = e.target.attributes.dataid.textContent;
-        const getAllStorageItems = localStorage.getItem(getStorageKey);
-        const parseAllStorageItems = JSON.parse(getAllStorageItems)
-        const reparseAllStorageItems = parseAllStorageItems.map(dato => JSON.parse(dato))
-        const ArrayCharacters = []
-        for (let i of reparseAllStorageItems) {
-            const sendCharacter = i.filter(dato => dato.id !== getId).map(dato => dato)
-            if (sendCharacter.length !== 0) {
-                const stringSendCharacter = JSON.stringify(sendCharacter);
-                ArrayCharacters.push(stringSendCharacter)
+        render ? setRender(false) : setRender(true)
+        const typeCharacter = e.target.attributes.datacharacter.textContent;
+        const getId = Number(e.target.attributes.dataid.textContent);
+        const getAllStorageCharacters = localStorage.getItem(typeCharacter);
+        const parseCharacter = JSON.parse(getAllStorageCharacters);
+        if (parseCharacter.length > 1) {
+            const reparseCharacters = parseCharacter.map(dato => JSON.parse(dato));
+            const arrayCharactersLocal = [];
+            for (let i of reparseCharacters) {
+                const sendCharacter = i.filter(dato => Number(dato.id) !== getId).map(dato => dato);
+                if (sendCharacter.length !== 0) {
+                    const stringSendCharacter = JSON.stringify(sendCharacter);
+                    arrayCharactersLocal.push(stringSendCharacter);
+                }
             }
+            if (arrayCharactersLocal.length === 0) {
+                localStorage.removeItem(typeCharacter);
+            } else {
+                const sendCharacterLocal = JSON.stringify(arrayCharactersLocal);
+                localStorage.setItem(typeCharacter, sendCharacterLocal);
+            }
+        } else {
+            localStorage.removeItem(typeCharacter);
         }
-        const sendCharacterLocal = JSON.stringify(ArrayCharacters)
-        localStorage.setItem(getStorageKey, sendCharacterLocal)
     }
 
-    localStorage.getItem("heroesId") !== null && localStorage.getItem("heroesId").length !== 2 ? getCharacter("heroesId") : localStorage.removeItem("heroesId");
-    localStorage.getItem("villainId") !== null && localStorage.getItem("villainId").length !== 2 ? getCharacter("villainId") : localStorage.removeItem("villainId");
-    if (localStorage.getItem("heroesId") !== null && localStorage.getItem("villainId") !== null) {
-        alldata.push(dataHero)
-        alldata.push(dataVillain)
-        graficPie("alldataPie", alldata)
-    }
     return (
-        <main className="main">
-            {localStorage.getItem("heroesId") !== null && localStorage.getItem("heroesId").length !== 2 ?
-                <section className="container--all-cards-graphic">
-                    <h1 className="main--title">Hero team</h1>
-                    <div className="container--card--graphic">
-                        <div className="container--cards">
-                            {reparseHeroId.map((datos, i) =>
-                                <div key={i}>
-                                    {datos.map((dato, i) =>
-                                        <section className="container--character-heroesId" key={i} >
-                                            <h2 className="character--title">{dato.name}</h2>
-                                            <img className="character--img" src={dato.image.url} alt={`pic-${dato.name}`} />
-                                            <div className="container--character-button">
-                                                <button className="character--button"><Link className="character--link" to={`/${dato.id}`}>More details</Link></button>
-                                                <button className="character--button" onClick={removeCharacter} datastorage="heroesId" dataid={dato.id}>Remove Hero</button>
-                                            </div>
-                                        </section>)}
+        <>
+            <Fade bottom>
+                <main className="main--home">
+
+                    {getHero === undefined ?
+                        <h1 className="container--team-title">There aren´t heroes in the team</h1>
+                        :
+                        <div className="container--team">
+                            <h1 className="container--team-title ">Hero team</h1>
+                            <div className="container--team-cards">
+                                {getHero.map(($dato, i) =>
+                                    <section key={i} className="container--characters" >
+                                        <div className="container--card"  >
+                                            {$dato.map((dato, i) =>
+                                                <section className="card--home" key={i} typecharacter="hero" onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} dataid={dato.id}>
+                                                    <div>
+                                                        <h2 className="character--title" >{dato.name}</h2>
+                                                        <img className="character--img" src={dato.image.url} alt={`pic-${dato.name}`} />
+                                                    </div>
+                                                    <div className="container--character-button" >
+                                                        <button className="character--button"><Link className="character--link" to={`/${dato.id}`}>More details</Link></button>
+                                                        <button className="character--button" onClick={removeCharacter} datacharacter="heroesId" dataid={dato.id} >Remove Character</button>
+                                                    </div>
+                                                    <div className="container--only-pie no-show">
+                                                        <PieChart className="pie--only-character" width={250} height={350}>
+                                                            <Pie
+                                                                dataKey="value"
+                                                                isAnimationActive={true}
+                                                                data={stats}
+                                                                cx="50%"
+                                                                cy="50%"
+                                                                outerRadius={80}
+                                                                fill="#8884d8"
+                                                                label
+                                                            />
+                                                            <Tooltip />
+                                                        </PieChart>
+                                                    </div>
+                                                </section>
+                                            )}
+                                        </div>
+                                    </section>
+                                )}
+                                <h3 className="stats--title">Stats Heroes</h3>
+                                <div className="container--stats">
+                                    <div>
+                                        <p className="stats--description">
+                                            Strongest stat of the team: <span>{maxStatNameHeroes} ({maxStatHeroes})</span> <br />
+                                            Average weight: <span>{averageWeigthHero} Kg </span> <br />
+                                            Average height: <span>{averageHeigthHero / 100} Mts </span>
+                                        </p>
+                                    </div>
+                                    <div className="container--pie">
+                                        <PieChart width={250} height={350}>
+                                            <Pie
+                                                dataKey="value"
+                                                isAnimationActive={true}
+                                                data={statsHeroes}
+                                                cx="50%"
+                                                cy="50%"
+                                                outerRadius={80}
+                                                fill="#8884d8"
+                                                label
+                                            />
+                                            <Tooltip />
+                                        </PieChart>
+                                    </div>
                                 </div>
-                            )}
-                        </div>
-                        <div className="container--grafic-pie">
-                            <h2 className="title-stats">Stats heroes</h2>
-                            <div className="container--team-stats">
-                                <p className="team--stats-text">
-                                    Strongest stat of the team:<span> {maxStatHero} </span> <br/>
-                                    Average weight: <span>{(weightHero.map(dato => parseInt(dato)).reduce((acc, weight) => acc + weight, 0) / weightHero.length).toFixed(2)} Kg </span> <br />
-                                    Average height: <span>{(heightHero.map(dato => parseInt(dato)).reduce((acc, height ) => acc + height, 0) / heightHero.length).toFixed(2)} Cm </span>
-                                </p>
-                            
-                                <PieChart width={400} height={400}>
-                                    <Pie
-                                        dataKey="value"
-                                        isAnimationActive={false}
-                                        data={dataHero}
-                                        cx="50%"
-                                        cy="50%"
-                                        outerRadius={80}
-                                        fill="#8884d8"
-                                        label
-                                    />
-                                    <Tooltip />
-                                </PieChart>
                             </div>
                         </div>
-                    </div>
-                </section>
-                : <h1 className="main--title">There isn´t team of Heroes</h1>}
-
-
-            {localStorage.getItem("villainId") !== null && localStorage.getItem("villainId").length !== 2 ?
-                <section className="container--all-cards-graphic">
-                    <h1 className="main--title">Villain team</h1>
-                    <div className="container--card--graphic">
-                        <div className="container--cards">
-                            {reparseVillainId.map((datos, i) =>
-                                <div key={i}  >
-                                    {datos.map((dato, i) =>
-                                        <section className="container--character-villainId" key={i} >
-                                            <h2 className="character--title">{dato.name}</h2>
-                                            <img className="character--img" src={dato.image.url} alt={`pic-${dato.name}`} />
-                                            <div className="container--character-button">
-                                                <button className="character--button"><Link className="character--link" to={`/${dato.id}`}>More details</Link></button>
-                                                <button className="character--button" onClick={removeCharacter} datastorage="villainId" dataid={dato.id}>Remove Villain</button>
-                                            </div>
-                                        </section>)}
+                    }
+                    {getVillain === undefined ?
+                        <h1 className="container--team-title">There aren´t villains in the team</h1>
+                        :
+                        <div className="container--team">
+                            <h1 className="container--team-title ">Villain team</h1>
+                            <div className="container--team-cards">
+                                {getVillain.map(($dato, i) =>
+                                    <section key={i} className="container--characters" >
+                                        <div className="container--card"  >
+                                            {$dato.map((dato, i) =>
+                                                <section className="card--home" key={i} onMouseEnter={mouseEnter} typecharacter="villain" onMouseLeave={mouseLeave} dataid={dato.id}>
+                                                    <div>
+                                                        <h2 className="character--title" >{dato.name}</h2>
+                                                        <img className="character--img" src={dato.image.url} alt={`pic-${dato.name}`} />
+                                                    </div>
+                                                    <div className="container--character-button" >
+                                                        <button className="character--button"><Link className="character--link" to={`/${dato.id}`}>More details</Link></button>
+                                                        <button className="character--button" onClick={removeCharacter} datacharacter="villainId" dataid={dato.id} >Remove Character</button>
+                                                    </div>
+                                                    <div className="container--only-pie no-show">
+                                                        <PieChart className="pie--only-character" width={250} height={350}>
+                                                            <Pie
+                                                                dataKey="value"
+                                                                isAnimationActive={true}
+                                                                data={stats}
+                                                                cx="50%"
+                                                                cy="50%"
+                                                                outerRadius={80}
+                                                                fill="#8884d8"
+                                                                label
+                                                            />
+                                                            <Tooltip />
+                                                        </PieChart>
+                                                    </div>
+                                                </section>
+                                            )}
+                                        </div>
+                                    </section>
+                                )}
+                                <h3 className="stats--title">Stats Villain</h3>
+                                <div className="container--stats">
+                                    <div>
+                                        <p className="stats--description">
+                                            Strongest stat of the team: <span>{maxStatNameVillain} ({maxStatVillain})</span> <br />
+                                            Average weight: <span>{averageWeigthVillain} Kg </span> <br />
+                                            Average height: <span>{averageHeigthVillain / 100} Mts </span>
+                                        </p>
+                                    </div>
+                                    <div className="container--pie">
+                                        <PieChart width={250} height={350}>
+                                            <Pie
+                                                dataKey="value"
+                                                isAnimationActive={true}
+                                                data={statsVillains}
+                                                cx="50%"
+                                                cy="50%"
+                                                outerRadius={80}
+                                                fill="#8884d8"
+                                                label
+                                            />
+                                            <Tooltip />
+                                        </PieChart>
+                                    </div>
                                 </div>
-
-                            )}
-                        </div>
-                        <div className="container--grafic-pie">
-                            <h2 className="title-stats">Stats Villains</h2>
-                            <div className="container--team-stats">
-                                <p className="team--stats-text">
-                                    Strongest stat of the team:<span> {maxStatVillain} </span> <br/>
-                                    Average weight: <span>{(weightVillain.map(dato => parseInt(dato)).reduce((acc, weight) => acc + weight, 0) / weightVillain.length).toFixed(2)} Kg </span> <br />
-                                    Average height: <span>{(heightVillain.map(dato => parseInt(dato)).reduce((acc, height ) => acc + height, 0) / heightVillain.length).toFixed(2)} Cm </span>
-                                </p>
-                            
-                            <PieChart width={400} height={400}>
-                                <Pie
-                                    dataKey="value"
-                                    isAnimationActive={false}
-                                    data={dataVillain}
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={80}
-                                    fill="#8884d8"
-                                    label
-                                />
-                                <Tooltip />
-                            </PieChart>
                             </div>
                         </div>
-                    </div>
-                </section>
-                : <h1 className="main--title">There isn´t team of villains</h1>}
-            {localStorage.getItem("heroesId") !== null && localStorage.getItem("villainId") !== null ?
-                <>
-                    <section className="container--total">
-                        <h2 className="title-stats">Team All Stats</h2>
-                        <div className="container--team-stats">
-                            <p className="team--stats-text">
-                                Strongest stat of the team:<span> {maxStatAll} </span> <br/>
-                                Average weight: <span>{(weightAll.map(dato => parseInt(dato)).reduce((acc, weight) => acc + weight, 0) / weightAll.length).toFixed(2)} Kg </span> <br />
-                                Average height: <span>{(heigthAll.map(dato => parseInt(dato)).reduce((acc, height ) => acc + height, 0) / heigthAll.length).toFixed(2)} Cm </span>
-                            </p>      
-                       
-                        <PieChart width={400} height={400}>
-                            <Pie
-                                dataKey="value"
-                                isAnimationActive={false}
-                                data={alldataPie}
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={80}
-                                fill="#8884d8"
-                                label
-                            />
-                            <Tooltip />
-                        </PieChart>
+                    }
+                    {getHero === undefined || getVillain === undefined ? null :
+                        <div className="container--team">
+                            <h1 className="container--team-title ">All team</h1>
+                            <div className="container--team-cards">
+                                {getHero.map(($dato, i) =>
+                                    <section key={i} className="container--characters" >
+                                        <div className="container--card"  >
+                                            {$dato.map((dato, i) =>
+                                                <section className="card--home" key={i} typecharacter="hero" onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} dataid={dato.id}>
+                                                    <div>
+                                                        <h2 className="character--title" >{dato.name}</h2>
+                                                        <img className="character--img" src={dato.image.url} alt={`pic-${dato.name}`} />
+                                                    </div>
+                                                    <div className="container--character-button" >
+                                                        <button className="character--button"><Link className="character--link" to={`/${dato.id}`}>More details</Link></button>
+                                                        <button className="character--button" onClick={removeCharacter} datacharacter="heroesId" dataid={dato.id} >Remove Character</button>
+                                                    </div>
+                                                    <div className="container--only-pie no-show">
+                                                        <PieChart className="pie--only-character" width={250} height={350}>
+                                                            <Pie
+                                                                dataKey="value"
+                                                                isAnimationActive={true}
+                                                                data={stats}
+                                                                cx="50%"
+                                                                cy="50%"
+                                                                outerRadius={80}
+                                                                fill="#8884d8"
+                                                                label
+                                                            />
+                                                            <Tooltip />
+                                                        </PieChart>
+                                                    </div>
+                                                </section>
+                                            )}
+                                        </div>
+                                    </section>
+                                )}
+                                {getVillain.map(($dato, i) =>
+                                    <section key={i} className="container--characters" >
+                                        <div className="container--card"  >
+                                            {$dato.map((dato, i) =>
+                                                <section className="card--home" key={i} onMouseEnter={mouseEnter} typecharacter="villain" onMouseLeave={mouseLeave} dataid={dato.id}>
+                                                    <div>
+                                                        <h2 className="character--title" >{dato.name}</h2>
+                                                        <img className="character--img" src={dato.image.url} alt={`pic-${dato.name}`} />
+                                                    </div>
+                                                    <div className="container--character-button" >
+                                                        <button className="character--button"><Link className="character--link" to={`/${dato.id}`}>More details</Link></button>
+                                                        <button className="character--button" onClick={removeCharacter} datacharacter="villainId" dataid={dato.id} >Remove Character</button>
+                                                    </div>
+                                                    <div className="container--only-pie no-show">
+                                                        <PieChart className="pie--only-character" width={250} height={350}>
+                                                            <Pie
+                                                                dataKey="value"
+                                                                isAnimationActive={true}
+                                                                data={stats}
+                                                                cx="50%"
+                                                                cy="50%"
+                                                                outerRadius={80}
+                                                                fill="#8884d8"
+                                                                label
+                                                            />
+                                                            <Tooltip />
+                                                        </PieChart>
+                                                    </div>
+                                                </section>
+                                            )}
+                                        </div>
+                                    </section>
+                                )}
+                                <h3 className="stats--title">All stats</h3>
+                                <div className="container--stats">
+                                    <div>
+                                        <p className="stats--description">
+                                            Strongest stat of the team: <span>{maxStatNameAll} ({maxStatAll})</span> <br />
+                                            Average weight: <span>{weightAll.reduce((a, b) => a + b, 0)} Kg </span> <br />
+                                            Average height: <span>{(heightAll.reduce((a, b) => a + b, 0) / 100)} Mts </span>
+                                        </p>
+                                    </div>
+                                    <div className="container--pie">
+                                        <PieChart width={250} height={350}>
+                                            <Pie
+                                                dataKey="value"
+                                                isAnimationActive={true}
+                                                data={pieAll}
+                                                cx="50%"
+                                                cy="50%"
+                                                outerRadius={80}
+                                                fill="#8884d8"
+                                                label
+                                            />
+                                            <Tooltip />
+                                        </PieChart>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </section>
-                </>
-                : <h1 className="main--title">There aren´t team of hero or villain</h1>}
-        </main>
+                    }
+                </main>
+            </Fade>
+        </>
     )
 }
 export default Home;

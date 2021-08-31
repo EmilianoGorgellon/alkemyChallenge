@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios"
-const CharacterInfo = (props) => {
+import Fade from 'react-reveal/Fade'
+const CharacterInfo = () => {
+    const token = localStorage.getItem("login");
     const parametros = useParams();
     const [datosJson, setDatosJson] = useState([]);
     const [image, setImage] = useState([]);
@@ -11,9 +13,9 @@ const CharacterInfo = (props) => {
     const [name, setName] = useState([]);
     const [alias, setAlias] = useState([]);
     const [workplace, setWorkPlace] = useState([]);
-    const token = localStorage.getItem("login");
+
     useEffect(() => {
-        const obtenerDatos = async () => {
+        const getData = async () => {
             const response = await axios.get(`https://www.superheroapi.com/api.php/${token}/${parametros.id}`)
             let datos = await response.data;
             setImage(datos.image.url)
@@ -25,30 +27,31 @@ const CharacterInfo = (props) => {
             setWorkPlace(datos.work.base)
             return setDatosJson(datos)
         }
-        obtenerDatos()
-    }, [])
+        getData()
+    }, [token, parametros.id])
 
     return (
         <div className="container--info">
-            <section className="container--card-info">
+            <Fade bottom>
+                <section className="container--card-info">
+                    <div className="container--img-description">
+                        <img className="card--info-img" src={image} alt={`pic-${datosJson.name}`} />
+                        <div className="container--description">
+                            <h2 className="card--info-title">{datosJson.name}</h2>
+                            <p className="card-description">
+                                Weight :<span className="content-description"> {weight[1]} </span> <br />
+                                Height : <span className="content-description"> {height[1]} </span> <br />
+                                Name :<span className="content-description"> {name["full-name"]} </span> <br />
+                                Alias: <span className="content-description"> {alias.join(", ")} </span> <br />
+                                Hair color:<span className="content-description"> {appearance["hair-color"]} </span><br />
+                                Eye Color: <span className="content-description"> {appearance["eye-color"]} </span> <br />
+                                Workplace: <span className="content-description"> {workplace} </span>
+                            </p>
+                        </div>
 
-                <div className="container--img-description">
-                    <img className="card--info-img" src={image} alt={`pic-${datosJson.name}`} />
-                    <div className="container--description">
-                        <h2 className="card--info-title">{datosJson.name}</h2>
-                        <p className="card-description">
-                            Weight :<span className="content-description"> {weight[1]} </span> <br />
-                            Height : <span className="content-description"> {height[1]} </span> <br />
-                            Name :<span className="content-description"> {name["full-name"]} </span> <br />
-                            Alias: <span className="content-description"> {alias.join(", ")} </span> <br />
-                            Hair color:<span className="content-description"> {appearance["hair-color"]} </span><br />
-                            Eye Color: <span className="content-description"> {appearance["eye-color"]} </span> <br />
-                            Workplace: <span className="content-description"> {workplace} </span>
-                        </p>
                     </div>
-
-                </div>
-            </section>
+                </section>
+            </Fade>
         </div>
     )
 }
