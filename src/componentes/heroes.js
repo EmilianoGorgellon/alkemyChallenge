@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from 'axios'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { PieChart, Pie, Tooltip } from 'recharts';
+import GraficPie from "./GraficPie";
 import Fade from 'react-reveal/Fade'
 const Heroes = () => {
     const params = useParams();
@@ -119,19 +119,7 @@ const Heroes = () => {
                                 <button className="character--button" onClick={setData} data={dato.id} dataalignment={dato.biography.alignment}>Add to team</button>
                             </div>
                             <div className="container--only-pie no-show">
-                                <PieChart className="pie--only-character" width={200} height={400}>
-                                    <Pie
-                                        dataKey="value"
-                                        isAnimationActive={true}
-                                        data={stats}
-                                        cx="50%"
-                                        cy="50%"
-                                        outerRadius={80}
-                                        fill="#8884d8"
-                                        label
-                                    />
-                                    <Tooltip />
-                                </PieChart>
+                                <GraficPie stats={stats} />
                             </div>
                         </div>
                     </section>

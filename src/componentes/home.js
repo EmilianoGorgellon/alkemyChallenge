@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PieChart, Pie, Tooltip } from 'recharts';
-import Fade from 'react-reveal/Fade'
+import Fade from 'react-reveal/Fade';
+import GraficPie from './GraficPie.js';
 const Home = () => {
     const [getHero, setGetHero] = useState();
     const [statsHeroes, setStatsHeroes] = useState(0);
@@ -188,6 +188,8 @@ const Home = () => {
             } else {
                 const sendCharacterLocal = JSON.stringify(arrayCharactersLocal);
                 localStorage.setItem(typeCharacter, sendCharacterLocal);
+                // const parseArrayCharactersLocal = arrayCharactersLocal.map(dato => JSON.parse(dato))
+                // typeCharacter === "heroesId" ? setGetHero(parseArrayCharactersLocal) : setGetVillain(parseArrayCharactersLocal)
             }
         } else {
             localStorage.removeItem(typeCharacter);
@@ -219,19 +221,7 @@ const Home = () => {
                                                         <button className="character--button" onClick={removeCharacter} datacharacter="heroesId" dataid={dato.id} >Remove Character</button>
                                                     </div>
                                                     <div className="container--only-pie no-show">
-                                                        <PieChart className="pie--only-character" width={250} height={350}>
-                                                            <Pie
-                                                                dataKey="value"
-                                                                isAnimationActive={true}
-                                                                data={stats}
-                                                                cx="50%"
-                                                                cy="50%"
-                                                                outerRadius={80}
-                                                                fill="#8884d8"
-                                                                label
-                                                            />
-                                                            <Tooltip />
-                                                        </PieChart>
+                                                        <GraficPie stats={stats} />
                                                     </div>
                                                 </section>
                                             )}
@@ -248,19 +238,7 @@ const Home = () => {
                                         </p>
                                     </div>
                                     <div className="container--pie">
-                                        <PieChart width={250} height={350}>
-                                            <Pie
-                                                dataKey="value"
-                                                isAnimationActive={true}
-                                                data={statsHeroes}
-                                                cx="50%"
-                                                cy="50%"
-                                                outerRadius={80}
-                                                fill="#8884d8"
-                                                label
-                                            />
-                                            <Tooltip />
-                                        </PieChart>
+                                        <GraficPie stats={statsHeroes} />
                                     </div>
                                 </div>
                             </div>
@@ -286,19 +264,7 @@ const Home = () => {
                                                         <button className="character--button" onClick={removeCharacter} datacharacter="villainId" dataid={dato.id} >Remove Character</button>
                                                     </div>
                                                     <div className="container--only-pie no-show">
-                                                        <PieChart className="pie--only-character" width={250} height={350}>
-                                                            <Pie
-                                                                dataKey="value"
-                                                                isAnimationActive={true}
-                                                                data={stats}
-                                                                cx="50%"
-                                                                cy="50%"
-                                                                outerRadius={80}
-                                                                fill="#8884d8"
-                                                                label
-                                                            />
-                                                            <Tooltip />
-                                                        </PieChart>
+                                                        <GraficPie stats={stats} />
                                                     </div>
                                                 </section>
                                             )}
@@ -315,19 +281,7 @@ const Home = () => {
                                         </p>
                                     </div>
                                     <div className="container--pie">
-                                        <PieChart width={250} height={350}>
-                                            <Pie
-                                                dataKey="value"
-                                                isAnimationActive={true}
-                                                data={statsVillains}
-                                                cx="50%"
-                                                cy="50%"
-                                                outerRadius={80}
-                                                fill="#8884d8"
-                                                label
-                                            />
-                                            <Tooltip />
-                                        </PieChart>
+                                        <GraficPie stats={statsVillains} />
                                     </div>
                                 </div>
                             </div>
@@ -351,19 +305,7 @@ const Home = () => {
                                                         <button className="character--button" onClick={removeCharacter} datacharacter="heroesId" dataid={dato.id} >Remove Character</button>
                                                     </div>
                                                     <div className="container--only-pie no-show">
-                                                        <PieChart className="pie--only-character" width={250} height={350}>
-                                                            <Pie
-                                                                dataKey="value"
-                                                                isAnimationActive={true}
-                                                                data={stats}
-                                                                cx="50%"
-                                                                cy="50%"
-                                                                outerRadius={80}
-                                                                fill="#8884d8"
-                                                                label
-                                                            />
-                                                            <Tooltip />
-                                                        </PieChart>
+                                                        <GraficPie stats={stats} />
                                                     </div>
                                                 </section>
                                             )}
@@ -384,19 +326,7 @@ const Home = () => {
                                                         <button className="character--button" onClick={removeCharacter} datacharacter="villainId" dataid={dato.id} >Remove Character</button>
                                                     </div>
                                                     <div className="container--only-pie no-show">
-                                                        <PieChart className="pie--only-character" width={250} height={350}>
-                                                            <Pie
-                                                                dataKey="value"
-                                                                isAnimationActive={true}
-                                                                data={stats}
-                                                                cx="50%"
-                                                                cy="50%"
-                                                                outerRadius={80}
-                                                                fill="#8884d8"
-                                                                label
-                                                            />
-                                                            <Tooltip />
-                                                        </PieChart>
+                                                        <GraficPie stats={stats} />
                                                     </div>
                                                 </section>
                                             )}
@@ -413,19 +343,7 @@ const Home = () => {
                                         </p>
                                     </div>
                                     <div className="container--pie">
-                                        <PieChart width={250} height={350}>
-                                            <Pie
-                                                dataKey="value"
-                                                isAnimationActive={true}
-                                                data={pieAll}
-                                                cx="50%"
-                                                cy="50%"
-                                                outerRadius={80}
-                                                fill="#8884d8"
-                                                label
-                                            />
-                                            <Tooltip />
-                                        </PieChart>
+                                        <GraficPie stats={pieAll} />
                                     </div>
                                 </div>
                             </div>

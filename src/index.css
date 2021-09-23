@@ -282,8 +282,9 @@
 
 .show--msj {
     display: block;
-    position: absolute;
+    position: fixed;
     width: 100%;
+    z-index: 1500;
 }
 
 .not--show-msj {
