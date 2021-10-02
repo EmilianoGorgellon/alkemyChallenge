@@ -5,8 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 const Login = () => {
+    
     const validation = {
-        email: /^[a-zA-Z0-9\.-_]{3,30}@+[a-zA-Z0-9\.-_]{3,15}\.+[a-zA-Z]+$/,
+        // eslint-disable-next-line
+        email: /^[a-zA-Z0-9\.-_]{3,30}@+[a-zA-Z0-9\.-_]{3,15}\.+[a-zA-Z]+$/, 
+        // eslint-disable-next-line
         password: /^[a-zA-Z0-9\.-_]{4,12}$/
     }
     const [login, setLogin] = useState(localStorage.getItem("login"))

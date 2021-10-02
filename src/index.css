@@ -141,6 +141,7 @@
 }
 
 .container--team-title {
+    grid-column: 1/4;
     padding-top: 20px;
     padding-bottom: 20px;
     text-align: center;
@@ -166,28 +167,30 @@
 
 .container--stats {
     grid-column: 1/4;
-    display: flex;
-    flex-direction: column;
     width: 100%;
-    justify-content: space-between;
-    align-items: center;
 }
-@media screen and (min-width: 768px) {
-    .container--stats {
-        flex-direction: row;
-        padding-left: 15%;
-        padding-right: 15%;
-    }
-}
+
 
 .stats--title {
     padding-top: 50px;
     grid-column: 1/4;
     text-align: center;
-    font-size: 32px;
+    font-size: 40px;
     padding-bottom: 50px;
 }
-
+.container--stats-team {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+@media screen and (min-width: 768px) {
+    .container--stats-team {
+        flex-direction: row;
+        padding-left: 15%;
+        padding-right: 15%;
+    }
+}
 .stats--title, .stats--description span {
     color: var(--white);
 }
@@ -234,34 +237,29 @@
     position: absolute;
     bottom: 50px;
     display: flex;
+    align-items: center;
     justify-content: space-evenly;
     width: 100%;
     z-index: 15000;
     flex-wrap: nowrap;
 }
-
-.character--button {
+.character--button, .character--link {
     padding-top: 10px;
     padding-bottom: 10px;
+    width: 50%;
     margin-left: 10px;
     margin-right: 10px;
     font-size: 18px;
     border-radius: 10px;
     border: 1px solid var(--black);
     transition: transform .4s;
-}
-
-@media screen and (min-width: 768px) {
-    .character--button:hover {
-        transform: scale(1.1);
-        color: var(--blue);
-    }
-}
-
+    height: 70px;
+} 
 .character--link {
     text-decoration: none;
+    text-align: center;
+    background-color: var(--white);
     color: var(--black);
-    transition: color .4s;
 }
 
 /* styles heroes.js */

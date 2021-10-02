@@ -16,14 +16,6 @@ const App = () => {
         localStorage.removeItem("login");
         setRenderLogin(true)
     }
-    const verLetra = (e) => {
-        console.log(e.code)
-        if (e.code === "Enter" || e.code === "NumpadEnter") {
-            console.log("toco enter")
-            console.log(e)
-            history.push(`/search/${buscador}`)
-        } 
-    }
     return (
         <>
             {Inicio ?

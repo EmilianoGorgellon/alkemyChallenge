@@ -19,4 +19,4 @@ function GraficPie(props) {
     )
 }
 
-export default GraficPie
+export default GraficPie;
