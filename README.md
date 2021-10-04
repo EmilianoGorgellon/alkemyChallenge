@@ -12,3 +12,5 @@
 - React (useState, useEffect, useContext, useReducer, React-router-dom)
 - HTML5
 - CSS3
+
+[Link de la pagina](https://alkemy-react-hero.herokuapp.com/ "Link de la pagina")
