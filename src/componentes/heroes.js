@@ -115,7 +115,7 @@ const Heroes = () => {
                                 <img className="character--img" src={dato.image.url} alt={`pic-${dato.name}`} />
                             </div>
                             <div className="container--character-button" >
-                                <button className="character--button"><Link className="character--link" to={`/${dato.id}`}>More details</Link></button>
+                                <Link className="character--link" to={`/${dato.id}`}>More <br /> details</Link>
                                 <button className="character--button" onClick={setData} data={dato.id} dataalignment={dato.biography.alignment}>Add to team</button>
                             </div>
                             <div className="container--only-pie no-show">
