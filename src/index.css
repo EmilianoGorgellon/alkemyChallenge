@@ -351,7 +351,11 @@
 .show {
     opacity: 1;
 }
-
+.main--title {
+    color: var(--white);
+    text-align: center;
+    grid-column: 1/4;
+}
 /* styles info */
 
 .container--info {
