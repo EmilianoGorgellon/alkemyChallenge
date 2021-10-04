@@ -28,12 +28,12 @@ const Heroes = () => {
         for (let i of datosJson.results) {
             if (Number(i.id) === dataId) {
                 let dataStats = [
-                    { name: "intelligence", value: parseInt(i.powerstats.intelligence) },
-                    { name: "strength", value: parseInt(i.powerstats.strength) },
-                    { name: "speed", value: parseInt(i.powerstats.speed) },
-                    { name: "durability", value: parseInt(i.powerstats.durability) },
-                    { name: "power", value: parseInt(i.powerstats.power) },
-                    { name: "combat", value: parseInt(i.powerstats.combat) }
+                    { name: "intelligence", value: parseInt(i.powerstats.intelligence !== "null" ? i.powerstats.intelligence : 1) },
+                    { name: "strength", value: parseInt(i.powerstats.strength !== "null" ? i.powerstats.strength : 1) },
+                    { name: "speed", value: parseInt(i.powerstats.speed !== "null" ? i.powerstats.speed : 1) },
+                    { name: "durability", value: parseInt(i.powerstats.durability !== "null" ? i.powerstats.durability : 1) },
+                    { name: "power", value: parseInt(i.powerstats.power !== "null" ? i.powerstats.power : 1) },
+                    { name: "combat", value: parseInt(i.powerstats.combat !== "null" ? i.powerstats.combat : 1) }
                 ];
                 setStats(dataStats)
             }

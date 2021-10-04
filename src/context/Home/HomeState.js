@@ -38,22 +38,22 @@ const HomeState = (props) => {
                 const $averageWeightCharacters = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => Math.round(sum + parseInt(value.appearance.weight[1])/ $dato.length) ,0)))
                 const averageWeightCharacters = $averageWeightCharacters.map(dato => dato.reduce((sum, value) => sum + parseInt(value), 0))
 
-                const $intelligence = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.intelligence) ,0)))
+                const $intelligence = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.intelligence !== "null" ? value.powerstats.intelligence : 1) ,0)))
                 const intelligence = $intelligence.map(dato => dato.reduce((sum, value) => sum + parseInt(value)))
 
-                const $strength = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.strength) ,0)))
+                const $strength = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.strength !== "null" ? value.powerstats.strength : 1) ,0)))
                 const strength = $strength.map(dato => dato.reduce((sum, value) => sum + parseInt(value)))
 
-                const $speed = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.speed) ,0)))
+                const $speed = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.speed !== "null" ? value.powerstats.speed : 1) ,0)))
                 const speed = $speed.map(dato => dato.reduce((sum, value) => sum + parseInt(value)))
     
-                const $durability = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.durability) ,0)))
+                const $durability = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.durability !== "null" ? value.powerstats.durability : 1) ,0)))
                 const durability = $durability.map(dato => dato.reduce((sum, value) => sum + parseInt(value)))
 
-                const $power = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.power) ,0)))
+                const $power = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.power !== "null" ? value.powerstats.power : 1) ,0)))
                 const power = $power.map(dato => dato.reduce((sum, value) => sum + parseInt(value)))
 
-                const $combat = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.combat) ,0)))
+                const $combat = arrayStats.map($dato => $dato.map(dato => dato.reduce((sum, value) => sum + parseInt(value.powerstats.combat !== "null" ? value.powerstats.combat : 1) ,0)))
                 const combat = $combat.map(dato => dato.reduce((sum, value) => sum + parseInt(value)))
                 const statTeam = [
                     { name: "intelligence", value: intelligence.reduce((sum , value) => sum + parseInt(value), 0) },

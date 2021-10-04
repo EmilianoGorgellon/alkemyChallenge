@@ -17,12 +17,12 @@ function HomeTeams(props) {
     const [averageHeigthCharacters, setAverageHeigthCharacters] = useState(0);
 
     useEffect(() => {
-        const intelligence = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.intelligence)), 0)
-        const strength = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.strength)), 0)
-        const speed = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.speed)), 0)
-        const durability = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.durability)), 0)
-        const power = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.power)), 0)
-        const combat = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.combat)), 0)
+        const intelligence = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.intelligence !== "null" ? dato.powerstats.intelligence : 1)), 0)
+        const strength = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.strength !== "null" ? dato.powerstats.strength : 1)), 0)
+        const speed = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.speed !== "null" ? dato.powerstats.speed : 1)), 0)
+        const durability = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.durability !== "null" ? dato.powerstats.durability : 1)), 0)
+        const power = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.power !== "null" ? dato.powerstats.power : 1)), 0)
+        const combat = getCharacter.reduce((sum, value) => sum + parseInt(value.map(dato => dato.powerstats.combat !== "null" ? dato.powerstats.combat : 1)), 0)
         const height = getCharacter.reduce((sum, value) => (sum + parseInt(value.map(dato => dato.appearance.height[1])) / getCharacter.length), 0)
         const weight = getCharacter.reduce((sum, value) => (sum + parseInt(value.map(dato => dato.appearance.weight[1])) / getCharacter.length), 0)
         const statsTeam = [
@@ -52,12 +52,12 @@ function HomeTeams(props) {
             for (let data of dataCharacter) {
                 if (Number(data.id) === Number(dataId)) {
                     const dataStats = [
-                        { name: "intelligence", value: parseInt(data.powerstats.intelligence) },
-                        { name: "strength", value: parseInt(data.powerstats.strength) },
-                        { name: "speed", value: parseInt(data.powerstats.speed) },
-                        { name: "durability", value: parseInt(data.powerstats.durability) },
-                        { name: "power", value: parseInt(data.powerstats.power) },
-                        { name: "combat", value: parseInt(data.powerstats.combat) }
+                        { name: "intelligence", value: parseInt(data.powerstats.intelligence !== "null" ? data.powerstats.intelligence : 1) },
+                        { name: "strength", value: parseInt(data.powerstats.strength !== "null" ? data.powerstats.strength : 1) },
+                        { name: "speed", value: parseInt(data.powerstats.speed !== "null" ? data.powerstats.speed : 1) },
+                        { name: "durability", value: parseInt(data.powerstats.durability !== "null" ? data.powerstats.durability : 1) },
+                        { name: "power", value: parseInt(data.powerstats.power !== "null" ? data.powerstats.power : 1) },
+                        { name: "combat", value: parseInt(data.powerstats.combat !== "null" ? data.powerstats.combat : 1) }
                     ];
                     setStats(dataStats);
                     break;
