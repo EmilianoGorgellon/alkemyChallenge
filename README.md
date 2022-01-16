@@ -12,4 +12,4 @@
 - HTML5
 - CSS3
 
-[Link de la pagina](https://alkemy-react-hero.herokuapp.com/ "Link de la pagina")
+### [Link de la pagina](https://alkemy-react-hero.herokuapp.com/ "Link de la pagina")
